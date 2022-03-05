@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ElectronNET.API;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
@@ -33,6 +34,11 @@ namespace MyBlazorServer
             services.AddHttpContextAccessor();
 
             services.AddScoped<StateContainer>();
+            
+            if (HybridSupport.IsElectronActive)
+            {
+                services.AddElectron();
+            }
 
         }
 
@@ -62,6 +68,14 @@ namespace MyBlazorServer
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
+
+            if (HybridSupport.IsElectronActive)
+            {
+                Task.Run(async () => await Electron.WindowManager.CreateWindowAsync());
+            }
+
+
+            
         }
     }
 }
