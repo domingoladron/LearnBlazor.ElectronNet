@@ -1,6 +1,6 @@
 @page "/"
-@using Newtonsoft.Json
 @using System.IO
+@using System.Text.Json
 
 <h1>Hello, world!</h1>
 
@@ -22,11 +22,13 @@ Welcome to your new app.
 
     protected override async Task OnInitializedAsync()
     {
-        //just calling Newtownsoft.Json class to fire the exception
-        var fakeClassData =
-            JsonConvert.DeserializeObject<FakeClass>(await File.ReadAllTextAsync(Path.Join(Environment.CurrentDirectory, "fakefile.json")));
 
-        _fakeClassAsJsonString = JsonConvert.SerializeObject(fakeClassData);
+        var jsonFileContents = await File.ReadAllTextAsync(Path.Join(Environment.CurrentDirectory, "fakefile.json"));
+
+        var fakeClassData = JsonSerializer.Deserialize<FakeClass>(jsonFileContents);
+
+        _fakeClassAsJsonString = JsonSerializer.Serialize(fakeClassData);
+
 
         await base.OnInitializedAsync();
     }
