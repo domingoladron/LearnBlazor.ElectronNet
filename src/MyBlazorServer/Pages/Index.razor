@@ -6,15 +6,28 @@
 
 Welcome to your new app.
 
+<div>
+    <b>Contents of the fake serialised file are:</b>
+    <div>
+        <code>@_fakeClassAsJsonString</code>
+    </div>
+</div>
+
 <SurveyPrompt Title="How is Blazor working for you?" />
 
 
 @code
 {
+    private string _fakeClassAsJsonString;
+
     protected override async Task OnInitializedAsync()
     {
+        //just calling Newtownsoft.Json class to fire the exception
         var fakeClassData =
-            JsonConvert.DeserializeObject<FakeClass>(await File.ReadAllTextAsync("D:\\dev\\Medium\\LearnBlazor.ElectronNet\\src\\MyBlazorServer\\fakefile.json"));
+            JsonConvert.DeserializeObject<FakeClass>(await File.ReadAllTextAsync(Path.Join(Environment.CurrentDirectory, "fakefile.json")));
+
+        _fakeClassAsJsonString = JsonConvert.SerializeObject(fakeClassData);
+
         await base.OnInitializedAsync();
     }
 
