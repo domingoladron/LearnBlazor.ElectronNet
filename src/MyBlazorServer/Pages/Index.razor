@@ -1,7 +1,21 @@
 @page "/"
+@using Newtonsoft.Json
+@using System.IO
 
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
+
+
+@code
+{
+    protected override async Task OnInitializedAsync()
+    {
+        var fakeClassData =
+            JsonConvert.DeserializeObject<FakeClass>(await File.ReadAllTextAsync("D:\\dev\\Medium\\LearnBlazor.ElectronNet\\src\\MyBlazorServer\\fakefile.json"));
+        await base.OnInitializedAsync();
+    }
+
+}
