@@ -1,7 +1,36 @@
 @page "/"
+@using System.IO
+@using System.Text.Json
 
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
 
+<div>
+    <b>Contents of the fake serialised file are:</b>
+    <div>
+        <code>@_fakeClassAsJsonString</code>
+    </div>
+</div>
+
 <SurveyPrompt Title="How is Blazor working for you?" />
+
+
+@code
+{
+    private string _fakeClassAsJsonString;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        var jsonFileContents = await File.ReadAllTextAsync(Path.Join(Environment.CurrentDirectory, "fakefile.json"));
+
+        var fakeClassData = JsonSerializer.Deserialize<FakeClass>(jsonFileContents);
+
+        _fakeClassAsJsonString = JsonSerializer.Serialize(fakeClassData);
+
+
+        await base.OnInitializedAsync();
+    }
+
+}
